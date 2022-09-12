@@ -1,39 +1,58 @@
 import React from 'react';
 import './App.css';
+import { loadUsers } from './utils/load-users';
 
 class App extends React.Component {
 
-  setState = {
-    url: []
+  state = {
+    users: [],
+    searchValue: '',
   };
 
-  handleButtonClick(){
-    this.url = '';
+  handleInputChange(){
+  }
+
+  handleLoadUsers = async () => {
+    const usersAndPhotos = await loadUsers();
+
+    this.setState({
+      users: usersAndPhotos
+    });
+  }
+
+  componentDidMount(){
+    this.handleLoadUsers();
   }
 
   render(){
+    const { users } = this.state;
+
     return (
-      <div className="card">
-        <form action={url}>
-          <label>Type a github username</label><br/>
-          <input type='text'></input>
-          <button onClick={handleButtonClick}>Submit</button>
-        </form>
-        {/* <form action="/action_page.php">
-          <label for="fname">First name:</label><br>
-          <input type="text" id="fname" name="fname" value="John"><br>
-          <label for="lname">Last name:</label><br>
-          <input type="text" id="lname" name="lname" value="Doe"><br><br>
-          <input type="submit" value="Submit">
-        </form>  */}
-      </div>
+      <section className='container'>
+        <div className="card">
+          <input
+            type="search"
+            className='text-input'
+            onChange={this.handleInputChange}
+            value={this.searchValue}
+            placeholder="Type your search"
+          />
+        </div>
+        <div className="users">
+          {users.map((user) => (
+              <div className='user'>
+                <img src={user.cover} alt={'title'}/>
+                <div className="user-content">
+                    <h2>{"title"} {"id"}</h2>
+                    <p>{"body"}</p>
+                </div>
+              </div>
+          ))}
+        </div>
+      </section>
     );
   }
 
 }
-
-// getUserInfo(url){
-//   const info = fetch(url);
-// }
 
 export default App;
